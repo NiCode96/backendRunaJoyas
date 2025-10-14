@@ -1,0 +1,56 @@
+### GET request to example server
+GET  http://localhost:3001/titulo
+
+### GET request to example server
+GET  http://localhost:3001/publicaciones/seleccionarPublicaciones
+
+
+### POST request para insertar una publicación
+POST http://localhost:3001/publicaciones/insertarPublicacion
+Content-Type: application/json
+
+
+### POST request para insertar una publicación
+POST http://localhost:3001/publicaciones/insertarPublicacion
+Content-Type: application/json
+
+{
+  "descripcionPublicaciones": "Pruebas Backend ",
+  "imagenPublicaciones_primera": "https://res.cloudinary.com/dauhxormz/image/upload/v1758881048/aupwiecgf16ugbfj6lcb.png",
+  "imagenPublicaciones_segunda": "https://res.cloudinary.com/dauhxormz/image/upload/v1759400050/erwfvflfpst9edusuflu.png",
+  "imagenPublicaciones_tercera": "https://res.cloudinary.com/dauhxormz/image/upload/v1759490937/ovwldvotclndgpcd50da.png"
+}
+
+
+
+### POST request para eliminar una publicación
+POST http://localhost:3001/publicaciones/eliminarPublicacion
+Content-Type: application/json
+
+{
+  "id_publicaciones": 2
+}
+
+
+### POST Actualizar informacion de publicacion
+POST http://localhost:3001/publicaciones/actualizarPublicacion
+Content-Type: application/json
+
+{
+  "descripcionPublicaciones": "Pruebas Backend pruebas pruebitas",
+  "imagenPublicaciones_primera": "pruebas randomn 1",
+  "imagenPublicaciones_segunda": "pruebas random 2",
+  "imagenPublicaciones_tercera": "pruebas random 3",
+  "id_publicaciones": 2
+}
+
+
+### GET publicación específica
+GET http://localhost:3001/publicaciones/2
+
+
+
+
+
+
+
