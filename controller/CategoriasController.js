@@ -19,9 +19,9 @@ export default class CategoriasController{
             const categoria = new Categorias();
             const resultado = await categoria.actualizarCategoria(descripcionCategoria, id_categoriaProducto)
             if(resultado === 1){
-                return res.json({"resultado": true})
+                return res.json({message: true})
             }else{
-                return res.json({"resultado": false})
+                return res.json({message: false})
             }
 
 

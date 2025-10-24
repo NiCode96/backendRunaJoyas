@@ -6,6 +6,7 @@ import tituloRoutes from "./view/tituloRoutes.js";
 import textosRoutes from "./view/textosRoutes.js";
 import categoriaRoutes from "./view/categoriaRoutes.js";
 import publicacionesRoutes from "./view/publicacionesRoutes.js";
+import contactoRouter from "./view/contactoRoutes.js";
 
 
 
@@ -24,6 +25,7 @@ app.use("/titulo", tituloRoutes);
 app.use("/textos", textosRoutes);
 app.use("/categorias", categoriaRoutes);
 app.use("/publicaciones", publicacionesRoutes);
+app.use('/contacto', contactoRouter )
 
 
 

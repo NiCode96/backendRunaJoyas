@@ -14,6 +14,27 @@ this.categoriaProducto = categoriaProducto;
 
 
 
+    //SELECCION DE PRODUCTOS POR categoriaProducto
+    async selectProductoCategoria(categoriaProducto){
+        const conexion = DataBase.getInstance();
+        const query = 'SELECT * FROM productos where categoriaProducto = ?';
+        const param = [categoriaProducto];
+        try {
+            const resultado = await conexion.ejecutarQuery(query, param);
+            if(Array.isArray(resultado) && resultado.length > 0){
+                return resultado;
+            }else {
+                return [];
+            }
+        } catch (error) {
+            throw new Error('Problema al establecer la conexion con la base de datos desde la clase Productos.js')
+
+        }
+    }
+
+
+
+
 
 // ACTUALIZACION DE  PRODUCTO EN LA BASE DE DATOS
   async updateProducto(tituloProducto,descripcionProducto,valorProducto,imagenProducto,id_producto){
@@ -34,6 +55,8 @@ try {
     
 }  
   }
+
+
 
 
 
@@ -77,6 +100,37 @@ try {
 
 
 
+
+
+    // SELECCION DE TODOS LOS PRODUCTOS DE LA BASE DE DATOS PRECIO ORDEN DEL MENOR A MAYOR
+    async seleccionarMenorPrecio(){
+        const conexion = DataBase.getInstance();
+        const query = 'SELECT * FROM productos WHERE estadoProducto <> 0';
+        try {
+            const resultado = await conexion.ejecutarQuery(query);
+            return resultado;
+        } catch (error) {
+            throw new Error('Problema al establecer la conexion con la base de datos desde la clase Productos.js')
+
+        }
+    }
+
+
+    // SELECCION DE TODOS LOS PRODUCTOS DE LA BASE DE DATOS PRECIO ORDEN DEL MAYOR A MENOR
+    async seleccionarMayorPrecio(){
+        const conexion = DataBase.getInstance();
+        const query = 'SELECT * FROM productos WHERE estadoProducto <> 0 ORDER BY valorProducto DESC ;';
+        try {
+            const resultado = await conexion.ejecutarQuery(query);
+            return resultado;
+        } catch (error) {
+            throw new Error('Problema al establecer la conexion con la base de datos desde la clase Productos.js')
+
+        }
+    }
+
+
+
 //METODO PARA SELECCIONAR PRODUCTO ESPECIFICO POR ID DE PRODUCTO EN LA BASE DE DATOS
     async selectProductoEspecifico(id_producto){
     const conexion = DataBase.getInstance();
@@ -110,12 +164,9 @@ try {
       return filasAfectadas;
     } else {
       return resultado;
-      
     }
 } catch (error) {
     throw new Error('NO se logo eliminar Producto  / Problema al establecer la conexion con la base de datos desde la clase Pacientes.js')
-    
 }  
   }
-
 }

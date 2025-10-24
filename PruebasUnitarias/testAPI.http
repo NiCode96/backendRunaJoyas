@@ -53,4 +53,22 @@ GET http://localhost:3001/publicaciones/2
 
 
 
+### POST request para seleccionar por categoria los productos
+POST http://localhost:3001/producto/categoriaProducto
+Content-Type: application/json
+
+{
+  "categoriaProducto": 13
+}
+
+
+
+### GET request para seleccionar por categoria los productos
+GET http://localhost:3001/producto/seleccionarProducto
+
+
+
+
+
+
 

@@ -31,9 +31,9 @@ export default class PublicacionesController {
                 id_publicaciones)
 
             if(resultado === 1){
-                return res.json({"resultado": true})
+                return res.json({message: true})
             }else{
-                return res.json({"resultado": false})
+                return res.json({message: false})
             }
 
 
