@@ -125,6 +125,21 @@ export default class ProductoController {
   }
 
 
+    // SELECCION DE TODOS LOS PRODUCTOS EN OFERTA (ESTADO 3) DE LA BASE DE DATOS
+    static async seleccionarTodosProductosOferta(req, res) {
+        try {
+            const producto = new Producto();
+            const dataProducto = await producto.selectProductoOferta();
+            return res.json(dataProducto);
+        } catch (error) {
+            res.status(500).json({
+                error:
+                    "No se ha podido realizar la consulta desde ProductoController.js",
+            });
+        }
+    }
+
+
 
 
     // SELECCION DE TODOS LOS PRODUCTOS DE LA BASE DE DATOS PRECIO ORDEN DEL MENOR A MAYOR

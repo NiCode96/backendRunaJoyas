@@ -99,6 +99,21 @@ try {
   }
 
 
+    // SELECCION DE TODOS LOS PRODUCTOS DE LA BASE DE DATOS QUE ESTAN EN OFERTA (ESTADO PRODUCTO = 3)
+    async selectProductoOferta(){
+        const conexion = DataBase.getInstance();
+        const query = 'SELECT * FROM productos WHERE estadoProducto = 3;';
+        try {
+            const resultado = await conexion.ejecutarQuery(query);
+            return resultado;
+        } catch (error) {
+            throw new Error('Problema al establecer la conexion con la base de datos desde la clase Productos.js')
+
+        }
+    }
+
+
+
 
 
 
