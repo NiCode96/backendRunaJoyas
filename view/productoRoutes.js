@@ -3,17 +3,21 @@ const router = Router();
 import ProductoController from "../controller/ProductoController.js";
 
 
+router.post('/buscarSimilar', ProductoController.seleccionarProductoSimilar);
 
 router.post('/insertarProducto', ProductoController.insertarProducto);
 router.post('/actualizarProducto', ProductoController.actualizarProducto);
 router.post('/eliminarProducto', ProductoController.eliminarProducto);
+router.post('/marcarOferta', ProductoController.marcarProductoComoOferta);
+router.post('/marcarNormal', ProductoController.marcarProductoNormal);
 router.get('/seleccionarProducto', ProductoController.seleccionarTodosProductos);
+router.get('/seleccionarProductoReciente', ProductoController.seleccionarProductosRecientes);
 router.get('/seleccionarOfertas', ProductoController.seleccionarTodosProductosOferta);
-router.get('/:id_producto', ProductoController.seleccionarProductoEspecifico);
 router.post('/categoriaProducto', ProductoController.seleccionarProductoCategoria);
 router.get('/ordenarMayor', ProductoController.seleccionarTodosProductosMayorPrecio);
 router.get('/ordenarMenor', ProductoController.seleccionarTodosProductosMenorPrecio);
 
+router.get('/:id_producto', ProductoController.seleccionarProductoEspecifico);
 
 
 

@@ -25,6 +25,28 @@ export default class ProductoController {
 
 
 
+    // SELECCION DE LOS PRODUCTOS DE LA BASE DE DATOS CATEGORIA POR SIMILITUD DE NOMBRE
+    static async seleccionarProductoSimilar(req, res) {
+        try {
+            const { tituloProducto } = req.body;
+            console.log(tituloProducto);
+            const producto = new Producto();
+
+            if (!tituloProducto ) {
+                return res.status(404).json({message:"sindato"});
+
+            } else {
+                const dataProducto = await producto.selectProductoSimilar(tituloProducto);
+                return res.json(dataProducto);
+            }
+        } catch (error) {
+            res.status(500).json({message: "sindato",});
+        }
+    }
+
+
+
+
 //ACTUALIZAR PRODUCTO EN LA BASE DE DATOS
   static async actualizarProducto(req, res) {
     try {
@@ -33,20 +55,22 @@ export default class ProductoController {
         tituloProducto,
         descripcionProducto,
         valorProducto,
+        categoriaProducto,
         imagenProducto,
+        imagenProductoSegunda,
+        imagenProductoTercera,
+        imagenProductoCuarta,
         id_producto
       } = req.body;
 
-      if (
-        !tituloProducto ||
+      if (!tituloProducto ||
         !descripcionProducto ||
         !valorProducto ||
+          !categoriaProducto ||
         !imagenProducto||
         !id_producto
       ) {
-        return res
-          .status(400)
-          .json({ message: "Faltan datos obligatorios en el body" });
+        return res.status(400).json({ message: "sindato" });
       }
 
       const producto = new Producto();
@@ -54,11 +78,22 @@ export default class ProductoController {
         tituloProducto,
         descripcionProducto,
         valorProducto,
+          categoriaProducto,
         imagenProducto,
+        imagenProductoSegunda,
+        imagenProductoTercera,
+        imagenProductoCuarta,
         id_producto
       );
-      
-      return res.json(resultado);
+
+      console.log('Resultado updateProducto:', resultado);
+
+      if (resultado.affectedRows > 0) {
+          return res.status(200).json({message:"ok"});
+      }else {
+          return res.status(404).json({message:"sindato"});
+      }
+
     } catch (error) {
       res.status(500).json({
         error:
@@ -76,32 +111,37 @@ export default class ProductoController {
     try {
       console.log(req.body);
       const {
-        tituloProducto,
-        descripcionProducto,
-        valorProducto,
-        imagenProducto,
+          tituloProducto,
+          descripcionProducto,
+          valorProducto,
+          categoriaProducto,
+          imagenProducto,
+          imagenProductoSegunda,
+          imagenProductoTercera,
+          imagenProductoCuarta
       } = req.body;
 
-      if (
-        !tituloProducto ||
-        !descripcionProducto ||
-        !valorProducto ||
-        !imagenProducto
-      ) {
-        return res
-          .status(400)
-          .json({ message: "Faltan datos obligatorios en el body" });
+      if (!tituloProducto || !descripcionProducto || !valorProducto || !categoriaProducto || !imagenProducto) {
+        return res.status(400).json({ message: "sindato" });
       }
 
       const producto = new Producto();
       const resultado = await producto.insertProducto(
-        tituloProducto,
-        descripcionProducto,
-        valorProducto,
-        imagenProducto
+          tituloProducto,
+          descripcionProducto,
+          valorProducto,
+          categoriaProducto,
+          imagenProducto,
+          imagenProductoSegunda,
+          imagenProductoTercera,
+          imagenProductoCuarta
       );
 
-      return res.json(resultado);
+      if (resultado.affectedRows > 0) {
+          return res.json({message: "ok"});
+      }else {
+          return res.status(400).json({message: "sinfilasafectadas"});
+      }
     } catch (error) {
       res.status(500).json({
         error:
@@ -123,6 +163,23 @@ export default class ProductoController {
       });
     }
   }
+
+
+
+
+    // SELECCION DE TODOS LOS PRODUCTOS INGRESADOS RECIENTEMENTE A LA BASE DE DATOS
+    static async seleccionarProductosRecientes(req, res) {
+        try {
+            const producto = new Producto();
+            const dataProducto = await producto.selectProductoReciente();
+            return res.json(dataProducto);
+        } catch (error) {
+            res.status(500).json({
+                error:
+                    "No se ha podido realizar la consulta desde ProductoController.js",
+            });
+        }
+    }
 
 
     // SELECCION DE TODOS LOS PRODUCTOS EN OFERTA (ESTADO 3) DE LA BASE DE DATOS
@@ -153,7 +210,6 @@ export default class ProductoController {
             }else {
                 return res.json(dataProducto);
             }
-
         } catch (error) {
             res.status(500).json({
                 error:
@@ -213,27 +269,80 @@ export default class ProductoController {
 
   static async eliminarProducto(req, res) {
     try {
-      console.log(req.body);
-      const {
-  id_producto
-      } = req.body;
+        console.log(req.body);
+      const {id_producto} = req.body;
 
-      if (
-        !id_producto
-      ) {
-        return res
-          .status(400)
-          .json({ message: "Faltan datos obligatorios en el body" });
+      if (!id_producto) {
+        return res.status(400).json({ message: "sindato" });
       }
 
       const producto = new Producto();
       const resultado = await producto.eliminarProducto(id_producto);
-      return res.json(resultado);
+      if (resultado.affectedRows > 0) {
+          return res.json({message: "ok"});
+      }
     } catch (error) {
-      res.status(500).json({
-        error:
-          "No se ha podido realizar la consulta desde ProductoController.js",
+      res.status(500).json({error: "No se ha podido realizar la consulta de eliminacion del producto desde ProductoController.js",
       });
     }
   }
+
+
+  // FUNCION CONTROLLER PARA MARCAR EL PRODUCTO COMO OFERTA EN LA BASE DE DATOS (OFERTA CORRESPONDE AL ESTADO 3 EN LA TABLA PRODUCTOS)
+    static async marcarProductoComoOferta(req, res) {
+        try {
+            const {id_producto} = req.body;
+            console.log(req.body);
+
+            if (!id_producto) {
+                return res.status(400).json({ message: "sindato" });
+            }
+            const producto = new Producto();
+            const resultado = await producto.marcarProductoOferta(id_producto);
+
+            if (!resultado) {
+                return res.status(404).json({message:"sindato"});
+
+            }else {
+                return res.json({message:"ok"});
+            }
+
+
+        } catch (error) {
+            res.status(500).json({error: "No se ha podido realizar la consulta desde ProductoController.js",});
+        }
+    }
+
+
+
+
+
+
+
+
+
+    // FUNCION CONTROLLER PARA MARCAR EL PRODUCTO COMO SIN OFERTA EN LA BASE DE DATOS (OFERTA CORRESPONDE AL ESTADO 1 EN LA TABLA PRODUCTOS)
+    static async marcarProductoNormal(req, res) {
+        try {
+            const {id_producto} = req.body;
+            console.log(req.body);
+
+            if (!id_producto) {
+                return res.status(400).json({ message: "sindato" });
+            }
+            const producto = new Producto();
+            const resultado = await producto.marcarProductoNormal(id_producto);
+
+            if (!resultado) {
+                return res.status(404).json({message:"sindato"});
+
+            }else {
+                return res.json({message:"ok"});
+            }
+
+
+        } catch (error) {
+            res.status(500).json({error: "No se ha podido realizar la consulta desde ProductoController.js",});
+        }
+    }
 }

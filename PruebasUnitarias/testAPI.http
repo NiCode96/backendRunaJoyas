@@ -64,11 +64,40 @@ Content-Type: application/json
 
 
 ### GET request para seleccionar por categoria los productos
-GET http://localhost:3001/producto/seleccionarProducto
+GET http://localhost:3001/producto/ordenarMenor
 
 
 
 
+### POST request para maracr productos como oferta estado 3 en db
+POST http://localhost:3001/producto/marcarOferta
+Content-Type: application/json
+
+{
+  "id_producto" : 5
+}
 
 
 
+
+### POST request para maracr productos como oferta estado 3 en db
+POST http://localhost:3001/producto/insertarProducto
+Content-Type: application/json
+
+{
+  "tituloProducto": "PRUEBAS INTEGRACION BACKEND 11111",
+  "descripcionProducto": "Ine Jue dar un toque distintivo a tu estilo",
+  "valorProducto": 1000,
+  "categoriaProducto": 1,
+  "imagenProducto": "https://res.cloudinary.com/dauhxormz/image/upload/v1758884746/akahw0q6nrhlvkkuetf0.png"
+}
+
+
+
+### POST request para  productos similar en tituloProducto
+POST http://localhost:3001/producto/buscarSimilar
+Content-Type: application/json
+
+{
+  "tituloProducto": "coll"
+}

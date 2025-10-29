@@ -40,8 +40,7 @@ export default class CategoriasController{
             const {descripcionCategoria} = req.body;
 
             if (
-                !descripcionCategoria
-            ) {
+                !descripcionCategoria) {
                 return res
                     .status(400)
                     .json({ message: "Faltan datos obligatorios en el body" });

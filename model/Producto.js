@@ -2,14 +2,32 @@ import DataBase from "../config/Database.js";
 
 export default class Producto {
 
-    constructor (id_producto,tituloProducto,descripcionProducto, valorProducto,imagenProducto,estadoProducto,categoriaProducto){
-this.id_producto = id_producto;
-this.tituloProducto = tituloProducto;
-this.descripcionProducto = descripcionProducto;
-this.valorProducto = valorProducto;
-this.imagenProducto = imagenProducto;
-this.estadoProducto = estadoProducto;
-this.categoriaProducto = categoriaProducto;
+    constructor (
+        id_producto,
+        tituloProducto,
+        descripcionProducto,
+        valorProducto,
+        imagenProducto,
+        imagenProductoSegunda,
+        imagenProductoTercera,
+        imagenProductoCuarta,
+        estadoProducto,
+        categoriaProducto,
+        cantidadVendida,
+        indexCreacionProducto
+    ){
+        this.id_producto =id_producto;
+        this.tituloProducto = tituloProducto;
+        this.descripcionProducto = descripcionProducto;
+        this.valorProducto = valorProducto;
+        this.imagenProducto = imagenProducto;
+        this.imagenProductoSegunda = imagenProductoSegunda;
+        this.imagenProductoTercera = imagenProductoTercera;
+        this.imagenProductoCuarta = imagenProductoCuarta;
+        this.estadoProducto = estadoProducto;
+        this.categoriaProducto = categoriaProducto;
+        this.cantidadVendida = cantidadVendida;
+        this.indexCreacionProducto = indexCreacionProducto;
     }
 
 
@@ -17,7 +35,8 @@ this.categoriaProducto = categoriaProducto;
     //SELECCION DE PRODUCTOS POR categoriaProducto
     async selectProductoCategoria(categoriaProducto){
         const conexion = DataBase.getInstance();
-        const query = 'SELECT * FROM productos where categoriaProducto = ?';
+        // Filtrar solo productos con estado diferente de 0
+        const query = 'SELECT * FROM productos WHERE categoriaProducto = ? AND estadoProducto <> 0';
         const param = [categoriaProducto];
         try {
             const resultado = await conexion.ejecutarQuery(query, param);
@@ -37,19 +56,37 @@ this.categoriaProducto = categoriaProducto;
 
 
 // ACTUALIZACION DE  PRODUCTO EN LA BASE DE DATOS
-  async updateProducto(tituloProducto,descripcionProducto,valorProducto,imagenProducto,id_producto){
+  async updateProducto(
+      tituloProducto,
+      descripcionProducto,
+      valorProducto,
+      categoriaProducto,
+      imagenProducto,
+      imagenProductoSegunda,
+      imagenProductoTercera,
+      imagenProductoCuarta,
+      id_producto
+  ){
     const conexion = DataBase.getInstance();
-    const query = 'UPDATE productos SET tituloProducto = ? , descripcionProducto = ?, valorProducto = ? ,  imagenProducto = ? where id_producto = ? ';
-    const param = [tituloProducto,descripcionProducto,valorProducto,imagenProducto,id_producto];
+    const query = 'UPDATE productos SET tituloProducto = ? , descripcionProducto = ?, valorProducto = ? ,categoriaProducto = ?,  imagenProducto = ? ,imagenProductoSegunda = ?, imagenProductoTercera = ?,  imagenProductoCuarta = ? where id_producto = ? ';
+
+    const param = [
+        tituloProducto,
+        descripcionProducto,
+        valorProducto,
+        categoriaProducto,
+        imagenProducto,
+        imagenProductoSegunda,
+        imagenProductoTercera,
+        imagenProductoCuarta,
+        id_producto];
+
 try {
     const resultado = await conexion.ejecutarQuery(query,param);
-    const filasAfectadas = resultado.affectedRows;
-    if (filasAfectadas !== undefined && filasAfectadas !== null) {
-      return filasAfectadas;
-    } else {
-      return resultado;
-      
+    if(resultado){
+       return resultado;
     }
+
 } catch (error) {
     throw new Error('NO se logo actualizar Producto  / Problema al establecer la conexion con la base de datos desde la clase Productos.js')
     
@@ -58,27 +95,19 @@ try {
 
 
 
-
-
-
-
-
 // INSERCION DE NUEVO PRODUCTO EN LA BASE DE DATOS
-  async insertProducto(tituloProducto,descripcionProducto, valorProducto,imagenProducto){
+  async insertProducto(tituloProducto, descripcionProducto, valorProducto, categoriaProducto, imagenProducto, imagenProductoSegunda, imagenProductoTercera, imagenProductoCuarta){
     const conexion = DataBase.getInstance();
-    const query = 'INSERT INTO productos (tituloProducto,descripcionProducto, valorProducto ,imagenProducto) VALUES (?, ?, ?, ?)';
-    const param = [tituloProducto,descripcionProducto,valorProducto,imagenProducto];
+    const query = 'INSERT INTO productos (tituloProducto,descripcionProducto, valorProducto ,categoriaProducto ,imagenProducto,imagenProductoSegunda,imagenProductoTercera,imagenProductoCuarta) VALUES (?, ?, ?, ?,?,?,?,?)';
+    const param = [tituloProducto, descripcionProducto, valorProducto, categoriaProducto, imagenProducto, imagenProductoSegunda, imagenProductoTercera, imagenProductoCuarta];
 try {
     const resultado = await conexion.ejecutarQuery(query,param);
     const filasAfectadas = resultado.affectedRows;
     if (filasAfectadas !== undefined && filasAfectadas !== null) {
-      return filasAfectadas;
-    } else {
-      return resultado;
-      
+        return resultado;
     }
 } catch (error) {
-    throw new Error('NO se logo ingresar Producto nuevo / Problema al establecer la conexion con la base de datos desde la clase Pacientes.js')
+    throw new Error('NO se logo ingresar Producto nuevo / Problema al establecer la conexion con la base de datos desde la clase Productos.js')
     
 }  
   }
@@ -99,6 +128,48 @@ try {
   }
 
 
+
+    // SELECCION DE TODOS LOS PRODUCTOS DE LA BASE DE DATOS POR SIMILITD CUYO ESTADO SEA DIFERENTE DE 0 EL CUAL ES EL ELIMINADO LOGICO
+    async selectProductoSimilar(tituloProducto){
+        const conexion = DataBase.getInstance();
+        const query = 'SELECT * FROM productos WHERE estadoProducto <> 0 AND tituloProducto LIKE ?';
+        const param = [`%${tituloProducto}%`];
+        try {
+            const resultado = await conexion.ejecutarQuery(query,param);
+            if(Array.isArray(resultado)){
+                return resultado;
+            }else{
+                return[];
+            }
+        } catch (error) {
+            throw new Error('Problema al establecer la conexion con la base de datos desde la clase Productos.js')
+
+        }
+    }
+
+
+
+  //FUNCION PARA ORDERNAR LOS PRODUCTOS DE MANERA QUE SE MUESTREN LOS INGRESADOS MAS RECINETES
+    async selectProductoReciente(){
+        const conexion = DataBase.getInstance();
+        const query = 'SELECT * FROM productos WHERE estadoProducto <> 0 ORDER BY id_producto DESC';
+        try {
+            const resultado = await conexion.ejecutarQuery(query);
+            return resultado;
+        } catch (error) {
+            throw new Error('Problema al establecer la conexion con la base de datos desde la clase Productos.js')
+
+        }
+    }
+
+
+
+
+
+
+
+
+
     // SELECCION DE TODOS LOS PRODUCTOS DE LA BASE DE DATOS QUE ESTAN EN OFERTA (ESTADO PRODUCTO = 3)
     async selectProductoOferta(){
         const conexion = DataBase.getInstance();
@@ -117,10 +188,18 @@ try {
 
 
 
+
+
+
+
+
+
+
     // SELECCION DE TODOS LOS PRODUCTOS DE LA BASE DE DATOS PRECIO ORDEN DEL MENOR A MAYOR
     async seleccionarMenorPrecio(){
         const conexion = DataBase.getInstance();
-        const query = 'SELECT * FROM productos WHERE estadoProducto <> 0';
+        // Incluir solo productos activos (estadoProducto <> 0)
+        const query = 'SELECT * FROM `productos` WHERE estadoProducto <> 0 ORDER BY `productos`.`valorProducto` ASC';
         try {
             const resultado = await conexion.ejecutarQuery(query);
             return resultado;
@@ -129,12 +208,14 @@ try {
 
         }
     }
+
 
 
     // SELECCION DE TODOS LOS PRODUCTOS DE LA BASE DE DATOS PRECIO ORDEN DEL MAYOR A MENOR
     async seleccionarMayorPrecio(){
         const conexion = DataBase.getInstance();
-        const query = 'SELECT * FROM productos WHERE estadoProducto <> 0 ORDER BY valorProducto DESC ;';
+        // Incluir solo productos activos (estadoProducto <> 0)
+        const query = 'SELECT * FROM `productos` WHERE estadoProducto <> 0 ORDER BY `productos`.`valorProducto` DESC';
         try {
             const resultado = await conexion.ejecutarQuery(query);
             return resultado;
@@ -143,13 +224,16 @@ try {
 
         }
     }
+
+
 
 
 
 //METODO PARA SELECCIONAR PRODUCTO ESPECIFICO POR ID DE PRODUCTO EN LA BASE DE DATOS
     async selectProductoEspecifico(id_producto){
     const conexion = DataBase.getInstance();
-    const query = 'SELECT * FROM productos where id_producto = ?';
+    // Asegurar que el producto no esté marcado como eliminado (estadoProducto <> 0)
+    const query = 'SELECT * FROM productos WHERE id_producto = ? AND estadoProducto <> 0';
     const param = [id_producto];
 try {
  const resultado = await conexion.ejecutarQuery(query, param);
@@ -167,6 +251,12 @@ try {
 
 
 
+
+
+
+
+
+
 // ELIMINACION LOGICA DE PRODUCTO EN LA BASE DE DATOS
   async eliminarProducto(id_producto){
     const conexion = DataBase.getInstance();
@@ -174,14 +264,62 @@ try {
     const param = [id_producto];
 try {
     const resultado = await conexion.ejecutarQuery(query,param);
-    const filasAfectadas = resultado.affectedRows;
-    if (filasAfectadas !== undefined && filasAfectadas !== null) {
-      return filasAfectadas;
-    } else {
-      return resultado;
-    }
+   if(resultado){
+       return resultado;
+   }
+
 } catch (error) {
     throw new Error('NO se logo eliminar Producto  / Problema al establecer la conexion con la base de datos desde la clase Pacientes.js')
 }  
   }
+
+
+
+
+
+
+
+//FUNCION PARA MARCAR EL PRODUCTO COMO EN OFERTA EN BASE DE DATOS OFERTA CORRESPONDE AL ESTADO 3
+    async marcarProductoOferta(id_producto){
+        const conexion = DataBase.getInstance();
+        const query = 'UPDATE productos SET estadoProducto = 3 where id_producto = ?';
+        const param = [id_producto];
+        try {
+            const resultado = await conexion.ejecutarQuery(query,param);
+            const filasAfectadas = resultado.affectedRows;
+            if (filasAfectadas !== undefined && filasAfectadas !== null) {
+                return filasAfectadas;
+            } else {
+                return resultado;
+            }
+        } catch (error) {
+            throw new Error('NO se marco Producto producto como oferta estado 3  / Problema al establecer la conexion con la base de datos desde la clase Pacientes.js')
+        }
+    }
+
+
+
+
+
+
+
+
+
+//FUNCION PARA MARCAR EL PRODUCTO COMO SIN OFERTA EN BASE DE DATOS OFERTA CORRESPONDE AL ESTADO 1
+    async marcarProductoNormal(id_producto){
+        const conexion = DataBase.getInstance();
+        const query = 'UPDATE productos SET estadoProducto = 1 where id_producto = ?';
+        const param = [id_producto];
+        try {
+            const resultado = await conexion.ejecutarQuery(query,param);
+            const filasAfectadas = resultado.affectedRows;
+            if (filasAfectadas !== undefined && filasAfectadas !== null) {
+                return filasAfectadas;
+            } else {
+                return resultado;
+            }
+        } catch (error) {
+            throw new Error('NO se marco Producto producto como oferta estado 3  / Problema al establecer la conexion con la base de datos desde la clase Pacientes.js')
+        }
+    }
 }
