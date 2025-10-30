@@ -1,4 +1,4 @@
-import DataBase from "../config/DataBase.js";
+import DataBase from "../config/Database.js";
 
 export default class Contacto {
     constructor(

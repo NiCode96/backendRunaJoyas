@@ -1,5 +1,4 @@
-import DataBase from "../config/DataBase.js";
-
+import DataBase from "../config/Database.js";
 export default class Textos {
     constructor(id_Textos, titulo_id, contenido) {
         this.id_Textos = id_Textos;

@@ -87,12 +87,8 @@ export default class Publicaciones {
         ];
         try {
             const resultado = await conexion.ejecutarQuery(query,param);
-            const filasAfectadas = resultado.affectedRows;
-            if (filasAfectadas !== undefined && filasAfectadas !== null) {
-                return filasAfectadas;
-            } else {
+            if (resultado) {
                 return resultado;
-
             }
         } catch (error) {
             throw new Error('NO se logo ingresar publicacion nueva / Problema al establecer la conexion con la base de datos desde la clase Publicaciones.js')
@@ -121,14 +117,10 @@ export default class Publicaciones {
 
         try {
             const resultado = await conexion.ejecutarQuery(query, param);
-            if (
-                resultado.affectedRows !== undefined &&
-                resultado.affectedRows !== null
-            ) {
-                return resultado.affectedRows;
-            } else {
+            if (resultado) {
                 return resultado;
             }
+
         } catch (error) {
             console.log(error);
         }

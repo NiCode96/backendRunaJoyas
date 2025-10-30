@@ -30,13 +30,11 @@ export default class PublicacionesController {
                 imagenPublicaciones_tercera,
                 id_publicaciones)
 
-            if(resultado === 1){
-                return res.json({message: true})
-            }else{
-                return res.json({message: false})
-            }
-
-
+   if (resultado.affectedRows > 0 ) {
+       return res.status(200).json({message: "true"});
+   }else{
+       return res.status(200).json({message: "false"});
+   }
         } catch (error) {
             res.status(500).json({
                 error:
@@ -57,32 +55,26 @@ export default class PublicacionesController {
                 imagenPublicaciones_tercera
             } = req.body;
 
-            if (
-                !descripcionPublicaciones
-            ) {
-                return res
-                    .status(400)
-                    .json({ message: "sindato" });
+            if (!descripcionPublicaciones || !imagenPublicaciones_primera) {
+                return res.status(400).json({ message: "sindato" });
             }
 
            const publicaciones = new Publicaciones();
+
             const resultado = await publicaciones.insertarPublicacion(
                 descripcionPublicaciones,
                 imagenPublicaciones_primera,
                 imagenPublicaciones_segunda,
                 imagenPublicaciones_tercera
             )
-            if(resultado){
+            if(resultado.affectedRows > 0 ) {
                 return res.json({"resultado": true})
             }else{
                 return res.json({"resultado": false})
             }
 
         } catch (error) {
-            res.status(500).json({
-                error:
-                    "No se ha podido realizar la consulta desde PublicacionesController.js",
-            });
+            res.status(500).json({error: "No se ha podido realizar la consulta desde PublicacionesController.js",});
         }
     }
 

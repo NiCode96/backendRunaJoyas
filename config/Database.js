@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 
 class DataBase {
     constructor() {
@@ -10,48 +10,26 @@ class DataBase {
             user: process.env.DB_USER,
             password: process.env.DB_PASS,
             database: process.env.DB_DATABASE,
-            port: process.env.DB_PORT, // ahora se incluye el puerto
+            port: Number(process.env.DB_PORT || 3306), // ahora se incluye el puerto
             waitForConnections: true,
             connectionLimit: Number(process.env.DB_POOL_LIMIT || 10),
             queueLimit: 0
         });
-
-        // Conexión a la base de datos
-        this.conectar();
     }
 
-    conectar() {
-        this.pool.getConnection((error, conn) => {
-            if (error) {
-                console.error('Error al conectar a la base de datos:', error);
-                return;
-            }
-            console.log('\nConexión exitosa al pool de MySQL.\n');
-            conn.release();
-        });
-    }
-
-    cerrarConexion() {
-        this.pool.end((error) => {
-            if (error) {
-                console.error('Error al cerrar el pool de conexiones MySQL:', error);
-                return;
-            }
+    async cerrarConexion() {
+        try {
+            await this.pool.end();
             console.log('Pool de conexiones MySQL cerrado correctamente.\n');
-        });
+        } catch (error) {
+            console.error('Error al cerrar el pool de conexiones MySQL:', error);
+        }
     }
 
     // Método para ejecutar consultas SQL
     async ejecutarQuery(query, params) {
-        return new Promise((resolve, reject) => {
-            this.pool.query(query, params, (error, results) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(results);
-                }
-            });
-        });
+        const [rows] = await this.pool.query(query, params);
+        return rows;
     }
 
     static getInstance() {
