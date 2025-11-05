@@ -101,3 +101,16 @@ Content-Type: application/json
 {
   "tituloProducto": "coll"
 }
+
+### POST request para actualizar productos
+POST http://localhost:3001/producto/actualizarStock
+Content-Type: application/json
+
+{
+  "cantidadStock": 2,
+  "id_producto": 1
+}
+
+
+
+

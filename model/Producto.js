@@ -13,7 +13,7 @@ export default class Producto {
         imagenProductoCuarta,
         estadoProducto,
         categoriaProducto,
-        cantidadVendida,
+        cantidadStock,
         indexCreacionProducto
     ){
         this.id_producto =id_producto;
@@ -26,7 +26,7 @@ export default class Producto {
         this.imagenProductoCuarta = imagenProductoCuarta;
         this.estadoProducto = estadoProducto;
         this.categoriaProducto = categoriaProducto;
-        this.cantidadVendida = cantidadVendida;
+        this.cantidadStock = cantidadStock;
         this.indexCreacionProducto = indexCreacionProducto;
     }
 
@@ -320,6 +320,26 @@ try {
             }
         } catch (error) {
             throw new Error('NO se marco Producto producto como oferta estado 3  / Problema al establecer la conexion con la base de datos desde la clase Pacientes.js')
+        }
+    }
+
+
+
+
+
+
+    // FUNCION PARA ACTUALIZAR STOCK DE PRODUCTO EN LA BASE DE DATOS
+    async actualizarStock(cantidadStock, id_producto){
+        const conexion = DataBase.getInstance();
+        const query = 'UPDATE productos SET cantidadStock = ? WHERE id_producto = ?';
+        const param = [cantidadStock, id_producto];
+        try {
+            const resultado = await conexion.ejecutarQuery(query,param);
+            if(resultado){
+                return resultado;
+            }
+        } catch (error) {
+            throw new Error('NO se logro actualizar  / Problema al establecer la conexion con la base de datos desde la clase Producto.js')
         }
     }
 }

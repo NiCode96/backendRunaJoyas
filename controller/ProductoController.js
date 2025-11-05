@@ -77,8 +77,7 @@ export default class ProductoController {
       const resultado = await producto.updateProducto(
         tituloProducto,
         descripcionProducto,
-        valorProducto,
-          categoriaProducto,
+        valorProducto, categoriaProducto,
         imagenProducto,
         imagenProductoSegunda,
         imagenProductoTercera,
@@ -345,4 +344,43 @@ export default class ProductoController {
             res.status(500).json({error: "No se ha podido realizar la consulta desde ProductoController.js",});
         }
     }
+
+
+
+
+
+
+
+
+//ACTUALIZAR STOCK EN LA BASE DE DATOS
+    static async actualizarStock(req, res) {
+        try {
+            console.log(req.body);
+            const {cantidadStock, id_producto} = req.body;
+
+            if (!id_producto){
+                return res.status(400).json({ message: "sindato no viene el id_producto" });
+            }
+
+            const producto = new Producto();
+            const resultado = await producto.actualizarStock(cantidadStock, id_producto);
+
+            console.log('Resultado updateProducto:', resultado);
+
+            if (resultado.affectedRows > 0) {
+                return res.status(200).json({message:"ok"});
+            }else {
+                return res.status(404).json({message:"sindato no hay filas afectadas"});
+            }
+
+        } catch (error) {
+            res.status(500).json({
+                error:
+                    "No se ha podido realizar la consulta desde ProductoController.js",
+            });
+        }
+    }
+
+
+
 }

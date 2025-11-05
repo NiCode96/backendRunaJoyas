@@ -7,6 +7,7 @@ router.post('/buscarSimilar', ProductoController.seleccionarProductoSimilar);
 
 router.post('/insertarProducto', ProductoController.insertarProducto);
 router.post('/actualizarProducto', ProductoController.actualizarProducto);
+router.post('/actualizarStock', ProductoController.actualizarStock);
 router.post('/eliminarProducto', ProductoController.eliminarProducto);
 router.post('/marcarOferta', ProductoController.marcarProductoComoOferta);
 router.post('/marcarNormal', ProductoController.marcarProductoNormal);
