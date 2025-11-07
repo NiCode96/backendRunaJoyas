@@ -68,9 +68,9 @@ export default class PublicacionesController {
                 imagenPublicaciones_tercera
             )
             if(resultado.affectedRows > 0 ) {
-                return res.json({"resultado": true})
+                return res.json({message: true})
             }else{
-                return res.json({"resultado": false})
+                return res.json({message: false})
             }
 
         } catch (error) {

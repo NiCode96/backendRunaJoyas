@@ -7,6 +7,7 @@ import textosRoutes from "./view/textosRoutes.js";
 import categoriaRoutes from "./view/categoriaRoutes.js";
 import publicacionesRoutes from "./view/publicacionesRoutes.js";
 import contactoRouter from "./view/contactoRoutes.js";
+import mercadoPagoRouter from "./view/mercadoPagoRoutes.js";
 
 const app = express();
 app.use(express.json());
@@ -27,6 +28,7 @@ const corsConfig = {
 app.use(cors(corsConfig));
 
 app.get("/", (req, res) => { res.send("Hola mundo"); });
+app.use("/pagosMercadoPago", mercadoPagoRouter);
 app.use("/producto", productoRoute);
 app.use("/titulo", tituloRoutes);
 app.use("/textos", textosRoutes);
