@@ -13,16 +13,12 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-const ALLOWLIST = [
-  'https://runa-joyas-pruebas1-5yj4.vercel.app',
-  'http://localhost:3000'
-];
 
 const corsConfig = {
-  origin: (origin, cb) => cb(null, !origin || ALLOWLIST.includes(origin)),
-  credentials: true,
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization']
+    origin: true,           // refleja el origin de la petición (permite cualquier origen)
+    credentials: true,      // permite envío de cookies; poner false si no quieres cookies
+    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+    allowedHeaders: ['Content-Type','Authorization']
 };
 
 app.use(cors(corsConfig));
@@ -37,5 +33,5 @@ app.use("/publicaciones", publicacionesRoutes);
 app.use('/contacto', contactoRouter );
 
 app.listen(3001, () => {
-  console.log('http://localhost:3001/')
+    console.log('http://localhost:3001/')
 })
