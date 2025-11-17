@@ -155,7 +155,7 @@ export const createOrder = async (req, res) => {
             },
             ...(idPedidoResolved ? { external_reference: String(idPedidoResolved) } : {}),
             back_urls: {
-                success: process.env.FRONT_URL ? `${process.env.FRONT_URL}/success` : 'http://localhost:3000/success',
+                success: process.env.FRONT_URL ? `${process.env.FRONT_URL}/comprobantePago` : 'http://localhost:3000/comprobantePago',
                 failure: process.env.FRONT_URL ? `${process.env.FRONT_URL}/failure` : 'http://localhost:3000/failure',
                 pending: process.env.FRONT_URL ? `${process.env.FRONT_URL}/pending` : 'http://localhost:3000/pending',
             },
@@ -424,7 +424,7 @@ export const recibirPago = async (req, res) => {
             console.log('Guardando en DB - MercadoPago:', { mpId, preferenceId, totalAmount, paidAmount, orderStatus });
 
             const respuesta = await mercadoPagoClase.insertarDataMercadoPago(mpId, preferenceId, totalAmount, paidAmount, orderStatus);
-            console.log('Resultado insertarDataMercadoPago:', respuesta);
+            console.log('Insercion de datos de Mercado Pago exitosa:', respuesta);
         } catch (e) {
             console.error('Error guardando registro MercadoPago en DB:', e);
         }

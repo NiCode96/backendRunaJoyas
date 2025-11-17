@@ -19,6 +19,11 @@ export default class Titulos {
         this._titulo = in_titulo;
     }
 
+
+
+
+
+
     async selectTitulos() {
         const conexion = DataBase.getInstance();
         const query = "SELECT * FROM TitulosSecciones";
@@ -30,6 +35,11 @@ export default class Titulos {
             console.log(error);
         }
     }
+
+
+
+
+
 
     async updateTituloPrincipal(nuevoTitulo) {
         const conexion = DataBase.getInstance();
@@ -57,7 +67,6 @@ export default class Titulos {
         const conexion = DataBase.getInstance();
         const query = "UPDATE TitulosSecciones SET titulo = ? WHERE id_titulo = 2 ";
         const param = [nuevoSubTitulo];
-
         try {
             const resultado = await conexion.ejecutarQuery(query, param);
             if (
@@ -137,10 +146,27 @@ export default class Titulos {
             }else{
                 return resultado;
             }
-
-
-        } catch (error) {
+                    } catch (error) {
             throw new Error('Error al ejecutar consuta desde la clase Titulos.js ')
+
+        }
+    }
+
+
+
+    async updatePoliticaPrivacidadTitulo(politicaPrivacidad){
+        const conexion = DataBase.getInstance();
+        const query = 'UPDATE TitulosSecciones SET titulo = ? WHERE id_titulo = 6 ';
+        const param = [politicaPrivacidad]
+
+        try {
+
+            const resultado = await conexion.ejecutarQuery(query,param )
+            if (resultado){
+                return resultado;
+            }
+        } catch (error) {
+            throw new Error('Error al ejecutar consuta desde la clase Titulos.js para el titulo de politicas de privacidad ')
 
         }
     }

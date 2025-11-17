@@ -27,6 +27,8 @@ export default class Textos {
         this._contenido = in_contenido;
     }
 
+
+
     static async cargarTextos() {
         const conexion = DataBase.getInstance();
         const query = "SELECT * FROM Textos ";
@@ -39,6 +41,8 @@ export default class Textos {
             console.log(error);
         }
     }
+
+
 
     async updateTexto1(texto1){
         const conexion = DataBase.getInstance();

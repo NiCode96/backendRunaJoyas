@@ -3,6 +3,13 @@ import Titulos from "../model/Titulos.js";
 export default class TituloController {
     constructor() {}
 
+
+
+
+    static async actualizarTituloPoliticas(req, res) {}
+
+
+
     static async mostrarTitulo(req, res) {
         try {
             const titulo = new Titulos();

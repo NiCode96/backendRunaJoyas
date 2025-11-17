@@ -113,4 +113,39 @@ Content-Type: application/json
 
 
 
+### POST request para insertar pedidos realizados
+POST http://localhost:3001/pedidos/ingresarNuevoPedido
+Content-Type: application/json
 
+{
+  "fecha_pedido": "2025-11-12",
+  "nombre_comprador": "Juan",
+  "apellidosComprador": "Galdamez",
+  "telefono_comprador": "+56984645678",
+  "identificacion_comprador": "1234562139",
+  "direccion_despacho": "Av. Siempre Viva 742, Bueras",
+  "comuna": "Chillan",
+  "regionPais": "Ñuble",
+  "comentarios": "Entregar entre 9:00 y 12:00",
+  "totalPagado": "1000"
+}
+
+
+
+### POST request para seleccionar Segun similitud de nombres
+POST http://localhost:3001/pedidos/seleccionarPorComprador
+Content-Type: application/json
+
+{
+  "nombre_comprador": "Car"
+}
+
+
+
+### POST request para seleccionar segun el estado
+POST http://localhost:3001/pedidos/seleccionarPorEstados
+Content-Type: application/json
+
+{
+  "estado_pedido": 2
+}
