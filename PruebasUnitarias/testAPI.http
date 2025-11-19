@@ -120,14 +120,16 @@ Content-Type: application/json
 {
   "fecha_pedido": "2025-11-12",
   "nombre_comprador": "Juan",
-  "apellidosComprador": "Galdamez",
-  "telefono_comprador": "+56984645678",
-  "identificacion_comprador": "1234562139",
-  "direccion_despacho": "Av. Siempre Viva 742, Bueras",
-  "comuna": "Chillan",
-  "regionPais": "Ñuble",
+  "apellidosComprador": " Pérez",
+  "telefono_comprador": "+56912345678",
+  "email_Comprador": "demo@gmail.com",
+  "identificacion_comprador": "12345678-9",
+  "direccion_despacho": "Av. Siempre Viva 742, Santiago",
+  "comuna": "Argentina",
+  "regionPais": "Argentina",
   "comentarios": "Entregar entre 9:00 y 12:00",
-  "totalPagado": "1000"
+  "totalPagado": 111111,
+  "preference_id": 22222222222
 }
 
 
@@ -140,6 +142,26 @@ Content-Type: application/json
   "nombre_comprador": "Car"
 }
 
+
+
+
+### POST request para seleccionar Segun ID pedidos detalles
+POST http://localhost:3001/pedidos/seleccionarPorid
+Content-Type: application/json
+
+{
+  "id_pedido": 1
+}
+
+
+### POST request para cambio de estado Segun ID pedidos detalles
+POST http://localhost:3001/pedidos/cambioEstado
+Content-Type: application/json
+
+{
+  "estado_pedido": "0",
+  "id_pedido": 1
+}
 
 
 ### POST request para seleccionar segun el estado

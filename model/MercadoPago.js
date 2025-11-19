@@ -64,13 +64,20 @@ export default class MercadoPago {
     async insertarDataMercadoPago(id, preference_id, total_amount, paid_amount, order_status) {
         try {
             const conexion = DataBase.getInstance();
-            const query = 'INSERT INTO mercadoPago_logs (id, preference_id, total_amount, paid_amount, order_status) VALUES (?,?,?,?,?)';
+            // Insertar en columna mp_id para evitar conflicto con la columna 'id' autoincrement/INT
+            const query = 'INSERT INTO mercadoPago_logs (mp_id, preference_id, total_amount, paid_amount, order_status) VALUES (?,?,?,?,?)';
             const param = [id, preference_id, total_amount, paid_amount, order_status];
 
             const resultado = await conexion.ejecutarQuery(query, param);
             return resultado;
         } catch (error) {
             console.error('Error insertarDataMercadoPago:', error);
+            // Si la tabla no tiene la columna mp_id, indicar cómo arreglarlo
+            if (error && error.code === 'ER_BAD_FIELD_ERROR') {
+                console.error('Parece que la tabla `mercadoPago_logs` no tiene la columna `mp_id`.');
+                console.error('Puedes crearla ejecutando (ajusta el nombre de la tabla si es distinto):');
+                console.error("ALTER TABLE mercadoPago_logs ADD COLUMN mp_id BIGINT NULL DEFAULT NULL;");
+            }
             throw error;
         }
     }

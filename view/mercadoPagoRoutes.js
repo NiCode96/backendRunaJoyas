@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import {createOrder, recibirPago} from "../controller/MercadoPagoController.js";
 
+
 const router = Router();
+
+
+const FRONTEND = process.env.FRONT_URL;
 
 
 
@@ -15,19 +19,16 @@ router.post('/create-order', createOrder);
 // WEBHOOK DE ESTADO PAGADO
 router.post('/notificacionPago', recibirPago);
 
+router.get('/success', (req, res) => {
+    return res.redirect(`${FRONTEND}/pagoAprobado`);
+});
 
-// Rutas de retorno para MercadoPago (failure / pending)
-// Devuelven un mensaje simple o redirigen al FRONT_URL si está configurada.
 router.get('/failure', (req, res) => {
-  const front = process.env.FRONT_URL || null;
-  if (front) return res.redirect(`${front}/failure`);
-  return res.send('Pago fallido - status: failure');
+return res.redirect(`${FRONTEND}/pagoRechazado`);
 });
 
 router.get('/pending', (req, res) => {
-  const front = process.env.FRONT_URL || null;
-  if (front) return res.redirect(`${front}/pending`);
-  return res.send('Pago pendiente - status: pending');
+ return res.redirect(`${FRONTEND}/pagoPendiente`);
 });
 
 
