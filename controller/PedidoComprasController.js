@@ -1,9 +1,34 @@
 import PedidoCompras from '../model/PedidoCompras.js';
-import e from "express";
+import PedidoDetalle from '../model/PedidoDetalle.js';
 
 export default class PedidoComprasController {
     constructor() {
     }
+
+  //METODO PARA SELECCIONAR EL DETALLE DEL PEDIDO ( SE LLAMA A LA CLASE PEDIDODETALLE)
+    static async seleccionarDetallePedido(req, res){
+        const { id_pedido } = req.body;
+
+        if(!id_pedido){
+            return res.status(400).send({message : 'sindato'});
+        }
+        try {
+            const pedidoDetalleClase = new PedidoDetalle();
+            const resultadoData = await pedidoDetalleClase.seleccionarPedidosDetallePorID(id_pedido);
+            if(resultadoData){
+                return res.json(resultadoData);
+            }else {
+                return res.status(400).send({message : 'sindato'});
+            }
+
+        }catch(err){
+            return res.status(400).json({error: err});
+        }
+    }
+
+
+
+
 //METODO CONTROLLER PARA INSERTAR NUEVO PEDIDO EN LA BASE DE DATOS
     static async insertarPedidoNuevo(req, res) {
         try {

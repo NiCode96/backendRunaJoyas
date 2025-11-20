@@ -145,6 +145,17 @@ Content-Type: application/json
 
 
 
+
+### POST request para seleccionar detalle se usa el id
+POST http://localhost:3001/pedidos/seleccionarDetalle
+Content-Type: application/json
+
+{
+  "id_pedido": 38
+}
+
+
+
 ### POST request para seleccionar Segun ID pedidos detalles
 POST http://localhost:3001/pedidos/seleccionarPorid
 Content-Type: application/json

@@ -3,6 +3,7 @@ import mercadopago, * as mpNamed from 'mercadopago';
 import MercadoPago from '../model/MercadoPago.js';
 import PedidoComprasController from "../controller/PedidoComprasController.js";
 import PedidoCompras from "../model/PedidoCompras.js";
+import PedidoDetalle from "../model/PedidoDetalle.js";
 
 dotenv.config();
 
@@ -27,7 +28,7 @@ export const createOrder = async (req, res) => {
 
         // Normalizamos los items para Mercado Pago
         const items = productosDelCarrito.map((p, index) => ({
-            title: p.nombre || p.titulo || `Producto ${index + 1}`,
+            title: p.tituloProducto ?? p.titulo ?? p.nombre ?? `Producto ${index + 1}`,
             unit_price: Number(p.precio ?? 0),
             quantity: Number(p.cantidad ?? 1),
         }));
@@ -95,15 +96,26 @@ export const createOrder = async (req, res) => {
                 const resultadoInsert = await pedidoComprasModel.insertarPedidoCompra(fecha_pedido, nombre_comprador, apellidosComprador, telefono_comprador, email_Comprador, identificacion_comprador, direccion_despacho, comuna, regionPais, comentarios, totalPagado, preference_id);
 
 
+
                 if (resultadoInsert.affectedRows > 0) {
                     id_pedido = resultadoInsert.insertId;
+
+                    for (const producto of productosDelCarrito) {
+                        const id_producto = producto.id_producto;
+                        const tituloProducto = producto.tituloProducto;
+                        const cantidad = producto.cantidad;
+                        const precio_unitario = producto.precio; // o precio_unitario si así viene realmente
+
+                        const pedidoDetalleObjeto = new PedidoDetalle();
+                        await pedidoDetalleObjeto.insertarPedidoDetalle(
+                            id_pedido,
+                            id_producto,
+                            tituloProducto,
+                            cantidad,
+                            precio_unitario
+                        );
+                    }
                 }
-
-
-
-
-
-
 
                 return res.status(200).json({id: resultBody.id, init_point: resultBody.init_point, sandbox_init_point: resultBody.sandbox_init_point,});
 

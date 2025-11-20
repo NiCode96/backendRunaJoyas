@@ -1,20 +1,21 @@
 import DataBase from "../config/Database.js";
 
 export default class PedidoDetalle {
-    constructor (id_pedido , id_producto, cantidad, precio_unitario) {
+    constructor (id_pedido , id_producto,tituloProducto, cantidad, precio_unitario) {
         this.id_pedido = id_pedido;
         this.id_producto = id_producto;
+        this.tituloProducto = tituloProducto;
         this.cantidad = cantidad;
         this.precio_unitario = precio_unitario;
     }
 
 
     //FUNCION PARA INSERTAR NUEVO PEDIDO DETALLE
-    async insertarPedidoDetalle(id_pedido , id_producto, cantidad, precio_unitario){
+    async insertarPedidoDetalle(id_pedido , id_producto,tituloProducto, cantidad, precio_unitario){
         try {
             const conexion = DataBase.getInstance();
-            const query = "INSERT INTO pedidoDetalle(id_pedido, id_producto, cantidad, precio_unitario) VALUES (?,?,?,?)";
-            const params = [id_pedido , id_producto, cantidad, precio_unitario]
+            const query = "INSERT INTO pedidoDetalle(id_pedido, id_producto,tituloProducto,cantidad, precio_unitario) VALUES (?,?,?,?,?)";
+            const params = [id_pedido , id_producto,tituloProducto, cantidad, precio_unitario]
             const resultado = await conexion.ejecutarQuery(query, params);
             if(resultado){
                 return resultado;
@@ -54,7 +55,7 @@ export default class PedidoDetalle {
             const resultado = await conexion.ejecutarQuery(query,params );
 
             if(resultado){
-                return resultado;
+                return resultado || [];
             }
 
         }catch (e) {
