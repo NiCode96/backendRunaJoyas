@@ -113,11 +113,11 @@ try {
   }
 
 
-
+//SELECT * FROM productos WHERE estadoProducto <> 0;
     // SELECCION DE TODOS LOS PRODUCTOS DE LA BASE DE DATOS
   async selectProducto(){
     const conexion = DataBase.getInstance();
-    const query = 'SELECT * FROM productos WHERE estadoProducto <> 0;';
+    const query = 'SELECT * FROM productos WHERE estadoProducto <> 0 ORDER BY id_producto DESC';
 try {
     const resultado = await conexion.ejecutarQuery(query);
     return resultado;
